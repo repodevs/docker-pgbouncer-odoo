@@ -11,6 +11,7 @@ Features:
 * Includes PostgreSQL client tools such as ``psql``, ``pg_isready``
 * MD5 authentication by default.
 * `/etc/pgbouncer/pgbouncer.ini` and `/etc/pbbouncer/userlist.txt` are auto-created if they don't exist.
+* Support for [Odoo](http://github.com/odoo/odoo) see [examples/odoo](./examples/odoo/README.md)
 
 
 Why using PgBouncer
@@ -42,7 +43,7 @@ Usage
 docker run --rm \
     -e DATABASE_URL="postgres://user:pass@postgres-host/database" \
     -p 5432:5432 \
-    edoburu/pgbouncer
+    repodevs/pgbouncer
 ```
 
 
@@ -55,7 +56,7 @@ docker run --rm \
     -e DB_HOST=postgres-host \
     -e DB_NAME=database \
     -p 5432:5432 \
-    edoburu/pgbouncer
+    repodevs/pgbouncer
 ```
 
 Connecting should work as expected:
@@ -72,11 +73,11 @@ Almost all settings found in the [pgbouncer.ini](https://pgbouncer.github.io/con
 ```sh
 docker run --rm \
     -e DATABASE_URL="postgres://user:pass@postgres-host/database" \
-    -e POOL_MODE=session \
+    -e POOL_MODE=transaction \
     -e SERVER_RESET_QUERY="DISCARD ALL" \
     -e MAX_CLIENT_CONN=100 \
     -p 5432:5432
-    edoburu/pgbouncer
+    repodevs/pgbouncer
 ```
 
 
@@ -116,14 +117,14 @@ docker run --rm \
     -e DB_NAME=database \
     -v pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro
     -p 5432:5432
-    edoburu/pgbouncer
+    repodevs/pgbouncer
 ```
 
 
 Or extend the `Dockerfile`:
 
 ```Dockerfile
-FROM edoburu/pgbouncer:1.11.0
+FROM repodevs/pgbouncer:1.11.0
 COPY pgbouncer.ini userlist.txt /etc/pgbouncer/
 ```
 

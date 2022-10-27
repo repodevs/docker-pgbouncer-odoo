@@ -66,6 +66,10 @@ if [ ! -f ${PG_CONFIG_DIR}/pgbouncer.ini ]; then
   printf "\
 ################## Auto generated ##################
 [databases]
+# db postgres used by Odoo LISTEN/NOTIFY bus, so need pool_mode=session
+postgres = pool_mode=session host=${DB_HOST:?"Setup pgbouncer config error! You must set DB_HOST env"} \
+port=${DB_PORT:-5432} user=${DB_USER:-postgres}
+${CLIENT_ENCODING:+client_encoding = ${CLIENT_ENCODING}\n}\
 ${DB_NAME:-*} = host=${DB_HOST:?"Setup pgbouncer config error! You must set DB_HOST env"} \
 port=${DB_PORT:-5432} user=${DB_USER:-postgres}
 ${CLIENT_ENCODING:+client_encoding = ${CLIENT_ENCODING}\n}\
@@ -80,7 +84,7 @@ ${AUTH_HBA_FILE:+auth_hba_file = ${AUTH_HBA_FILE}\n}\
 auth_type = ${AUTH_TYPE:-md5}
 ${AUTH_USER:+auth_user = ${AUTH_USER}\n}\
 ${AUTH_QUERY:+auth_query = ${AUTH_QUERY}\n}\
-${POOL_MODE:+pool_mode = ${POOL_MODE}\n}\
+pool_mode = ${POOL_MODE:-transaction}
 ${MAX_CLIENT_CONN:+max_client_conn = ${MAX_CLIENT_CONN}\n}\
 ${DEFAULT_POOL_SIZE:+default_pool_size = ${DEFAULT_POOL_SIZE}\n}\
 ${MIN_POOL_SIZE:+min_pool_size = ${MIN_POOL_SIZE}\n}\

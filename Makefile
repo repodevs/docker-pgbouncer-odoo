@@ -1,4 +1,4 @@
-IMAGE_NAME=edoburu/pgbouncer
+IMAGE_NAME=repodevs/pgbouncer
 IMAGE_VERSION=latest
 
 docker:

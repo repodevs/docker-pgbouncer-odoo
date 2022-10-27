@@ -1,0 +1,46 @@
+version: '3.1'
+services:
+  web:
+    platform: linux/amd64
+    image: odoo:14.0
+    depends_on:
+      - pgbouncer
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./odoo.conf:/etc/odoo/odoo.conf
+    environment:
+      - HOST=pgbouncer
+      - USER=odoo
+      - PASSWORD=odoo
+
+  db:
+    image: postgres:13
+    ports:
+      - "6432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
+
+  pgbouncer:
+    image: repodevs/pgbouncer:1.17.0
+    depends_on:
+      - db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/pgbouncer:/etc/pgbouncer
+    environment:
+      - DB_HOST=db
+      - DB_USER=odoo
+      - DB_PASSWORD=odoo
+      # - POOL_MODE=transaction
+      - MAX_CLIENT_CONN=500
+
+volumes:
+  odoo-web-data:
+  odoo-db-data:
